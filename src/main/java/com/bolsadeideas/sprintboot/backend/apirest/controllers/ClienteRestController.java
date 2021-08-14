@@ -26,6 +26,9 @@ import com.bolsadeideas.sprintboot.backend.apirest.models.services.IClienteServi
 @RestController
 @RequestMapping("/api")
 public class ClienteRestController {
+	
+	static final String SUCCESS = "SUCCESS";
+	static final String MENSAJE = "MENSAJE";
 
 	@Autowired
 	private IClienteService clienteService;
@@ -49,7 +52,7 @@ public class ClienteRestController {
 					.concat(e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage())));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "Success");
+		response.put(MENSAJE, SUCCESS);
 		response.put("data", client);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
@@ -104,8 +107,18 @@ public class ClienteRestController {
 
 	@DeleteMapping("/v1/clientes/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long id) {
-		clienteService.delete(id);
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			clienteService.delete(id);
+		} catch (DataAccessException e) {
+			response.put("error", "Ocurrio un error: "
+					.concat(e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage())));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		response.put(MENSAJE, SUCCESS);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		
 	}
 
 }
