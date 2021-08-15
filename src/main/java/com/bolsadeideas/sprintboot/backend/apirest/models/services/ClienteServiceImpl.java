@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bolsadeideas.sprintboot.backend.apirest.models.dao.IClienteDao;
 import com.bolsadeideas.sprintboot.backend.apirest.models.entity.Cliente;
+import com.bolsadeideas.sprintboot.backend.apirest.models.entity.Region;
 
 @Service
 public class ClienteServiceImpl implements IClienteService {
@@ -25,17 +26,20 @@ public class ClienteServiceImpl implements IClienteService {
 	}
 
 	@Override
+	@Transactional
 	public Cliente save(Cliente cliente) {
 		return clienteDao.save(cliente);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Cliente findById(Long id) {
 		// TODO Auto-generated method stub
 		return clienteDao.findById(id).orElse(null);
 	}
 
 	@Override
+	@Transactional
 	public void delete(Long id) {
 		clienteDao.deleteById(id);
 	}
@@ -44,6 +48,12 @@ public class ClienteServiceImpl implements IClienteService {
 	@Transactional(readOnly = true)
 	public Page<Cliente> findAll(Pageable pageable) {
 		return clienteDao.findAll(pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Region> findAllRegiones() {
+		return clienteDao.findAllRegiones();
 	}
 
 }

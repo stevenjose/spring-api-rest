@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bolsadeideas.sprintboot.backend.apirest.models.entity.Cliente;
+import com.bolsadeideas.sprintboot.backend.apirest.models.entity.Region;
 import com.bolsadeideas.sprintboot.backend.apirest.models.services.IClienteService;
 import com.bolsadeideas.sprintboot.backend.apirest.models.services.UploadFileServiceImpl;
 
@@ -144,6 +145,8 @@ public class ClienteRestController {
 		clienteActual.setApellido(cliente.getApellido());
 		clienteActual.setNombre(cliente.getNombre());
 		clienteActual.setEmail(cliente.getEmail());
+		clienteActual.setRegion(cliente.getRegion());
+		
 		try {
 			client = clienteService.save(clienteActual);
 		} catch (DataAccessException e) {
@@ -236,6 +239,11 @@ public class ClienteRestController {
 		header.add(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\""+ recurso.getFilename() + "\"");
 		return new ResponseEntity<Resource>(recurso, header, HttpStatus.OK);
 		
+	}
+	
+	@GetMapping("/v1/clientes/regiones")
+	public List<Region> listarRegiones(){
+		return clienteService.findAllRegiones();
 	}
 
 }
